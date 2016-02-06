@@ -1,0 +1,13 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker build -t dakue/logstash-input-zendesk-builder .
+
+test:
+  override:
+    - mkdir -p target
+    - docker run -it -v $(pwd)/target:/target dakue/logstash-input-zendesk-builder
+    - test -f target/*.gem && cp target/*.gem $CIRCLE_ARTIFACTS
